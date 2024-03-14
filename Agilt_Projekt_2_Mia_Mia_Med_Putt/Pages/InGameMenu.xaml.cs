@@ -58,8 +58,12 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         {
             moveUpDialog.Begin();
             await Task.Delay(700);
-            Frame.Navigate(typeof(GameBoard));
-        }
+			//We pass 1 to identify the game being returned from a popup
+			Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+			Frame.Navigate(typeof(GameBoard), 1);
+			//Frame.GoBack();
+
+		}
 
 
 

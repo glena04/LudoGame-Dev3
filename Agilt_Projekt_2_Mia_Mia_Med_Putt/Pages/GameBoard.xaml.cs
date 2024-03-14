@@ -160,7 +160,11 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         /// <param name="e">NavigationEventArgs event object</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
+			if (e.Parameter is int parameter && parameter == 1)
+			{
+				return;
+			}
+			base.OnNavigatedTo(e);
 
             if (e.Parameter is GameBoardParameters gameBoardParameters)
             {
@@ -1005,9 +1009,25 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        private async void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(InGameMenu));
+			this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+			Frame.BackStack.Add(new PageStackEntry(typeof(GameBoard), null, null));
+
+			Frame.Navigate(typeof(InGameMenu));
+			//ContentDialog dialog = new ContentDialog
+   //         {
+   //             //RequestedTheme = ElementTheme.Dark,
+   //             FullSizeDesired = true,
+   //             Title = "",
+   //             Content = new InGameMenu(),
+   //             PrimaryButtonText = ""
+   //         };
+   //         dialog.IsSecondaryButtonEnabled = false;
+			//var bounds = Window.Current.Bounds;
+			//dialog.Width = bounds.Width;
+			//dialog.Height = bounds.Height;
+			//await dialog.ShowAsync();
         }
 
         /// <summary>
