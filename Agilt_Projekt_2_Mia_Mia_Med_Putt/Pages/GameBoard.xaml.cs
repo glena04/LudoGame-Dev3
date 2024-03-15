@@ -136,6 +136,12 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         public GameBoard()
         {
             InitializeComponent();
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+        }
+
+        public static GameBoard GetInstance()
+        {
+            return GameBoardSingleton.Instance.GetGameBoardInstance();
         }
 
         /// <summary>
@@ -158,13 +164,14 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         /// Runs on nanigating to this page. And sets the color for the selected players.
         /// </summary>
         /// <param name="e">NavigationEventArgs event object</param>
+        private bool isNavigated = false;//OnNavigatedTo should be run only one time
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-			if (e.Parameter is int parameter && parameter == 1)
-			{
-				return;
-			}
-			base.OnNavigatedTo(e);
+            if (isNavigated)
+            {
+                return;
+            }
+            base.OnNavigatedTo(e);
 
             if (e.Parameter is GameBoardParameters gameBoardParameters)
             {
@@ -186,7 +193,18 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
                 DicePic.PointerReleased += DicePic_PointerReleased;
 
                 AddStatusTextToTop($"{currentPlayer.Name} spelares tur", 8);
-            }   
+            }
+            isNavigated = true;
+        }
+
+        /// <summary>
+        /// Open ingame navigation event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(InGameMenu));
         }
 
         /// <summary>
@@ -1005,32 +1023,6 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         }
 
         /// <summary>
-        /// Open ingame navigation event handler
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void OpenButton_Click(object sender, RoutedEventArgs e)
-        {
-			this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
-			Frame.BackStack.Add(new PageStackEntry(typeof(GameBoard), null, null));
-
-			Frame.Navigate(typeof(InGameMenu));
-			//ContentDialog dialog = new ContentDialog
-   //         {
-   //             //RequestedTheme = ElementTheme.Dark,
-   //             FullSizeDesired = true,
-   //             Title = "",
-   //             Content = new InGameMenu(),
-   //             PrimaryButtonText = ""
-   //         };
-   //         dialog.IsSecondaryButtonEnabled = false;
-			//var bounds = Window.Current.Bounds;
-			//dialog.Width = bounds.Width;
-			//dialog.Height = bounds.Height;
-			//await dialog.ShowAsync();
-        }
-
-        /// <summary>
         /// Open ingame menu escape button klicked event handler
         /// </summary>
         /// <param name="sender"></param>
@@ -1285,6 +1277,35 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
                 GridCanvas.Children.Remove(RectangleToRemove);
             }
             
+        }
+    }
+
+    public class GameBoardSingleton
+    {
+        private static GameBoardSingleton instance;
+        private GameBoard gameBoardInstance;
+
+        private GameBoardSingleton() { }
+
+        public static GameBoardSingleton Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameBoardSingleton();
+                }
+                return instance;
+            }
+        }
+
+        public GameBoard GetGameBoardInstance()
+        {
+            if (gameBoardInstance == null)
+            {
+                gameBoardInstance = new GameBoard();
+            }
+            return gameBoardInstance;
         }
     }
 }
