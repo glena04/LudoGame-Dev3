@@ -49,9 +49,17 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         }
 
         // Button to go back to game, hide the menu
-        private async void BackToGameButton_Click(object sender, RoutedEventArgs e)
+        private void BackToGameButton_Click(object sender, RoutedEventArgs e)
         {
-            await BackToGame();
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame.CanGoBack)
+            {
+                rootFrame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(GameBoard));
+            }
         }
 
         private async Task BackToGame()

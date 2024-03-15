@@ -130,6 +130,12 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
         /// </summary>
         private Rectangle RectangleToRemove { get; set; }
 
+
+        ////
+        private bool isFirstNavigation = true;
+
+        ///
+
         /// <summary>
         /// Page constructor. It initializes the page, setup players and draw them on to the game board.
         /// </summary>
@@ -182,7 +188,13 @@ namespace Agilt_Projekt_2_Mia_Mia_Med_Putt.Pages
                 DicePic.PointerReleased += DicePic_PointerReleased;
 
                 AddStatusTextToTop($"{currentPlayer.Name} spelares tur", 8);
-            }   
+            }
+            if (isFirstNavigation)
+            {
+                // Initialize game state (e.g., create pawns, setup board, etc.)
+                // This should only happen on the first navigation
+                isFirstNavigation = false;
+            }
         }
 
         /// <summary>
